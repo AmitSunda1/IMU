@@ -2,7 +2,7 @@ import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { FadeInView } from "../ui/FadeInView";
 
 interface TimelineItem {
@@ -45,47 +45,71 @@ const journeyData: Record<string, TabContent> = {
     ],
   },
   values: {
-    narrativeTitle: "Values shape decisions. In chaos, they become the compass.",
-    narrative: "When everything was uncertain, they chose to build on principles that could survive anything.",
+    narrativeTitle: "2018 – 2022 · Three words. A pandemic. A ₹500 lesson.",
+    narrative: "In a brainstorming session with the auditor-mentor, the team searched for values that felt human — not corporate. Simple words. Words about service. Three emerged. And when they looked at the business they were building — Install, Maintain, Upgrade — the abbreviation said it all.",
+    narrativeFooter: "\"I will service your machine as if you would.\"",
     timeline: [
       {
+        year: "2018",
+        title: "Care is discovered",
+        description: "Service is fundamentally human. Care is not about contracts or SLAs — it is about treating every machine as if it belongs to you, and every engineer as someone worth protecting.",
+      },
+      {
+        year: "2018",
+        title: "Fair is named",
+        description: "Transparency with every stakeholder — the engineer on the ground, the customer waiting, the partner trusting you. Fair means no hidden shortcuts and no unfair burdens.",
+      },
+      {
+        year: "2018",
+        title: "Dare is chosen",
+        description: "Service any brand, any machine. Break the loyalty to the logo. Engineers who only serviced one brand were asked to dare — to see the machine, not the manufacturer.",
+      },
+      {
+        year: "2018",
+        title: "IMU is born",
+        description: "Install. Maintain. Upgrade. The abbreviation surfaces like a gift — a name that is also a mission. IMU is presented to the Netherlands promoter group and approved as the survival strategy.",
+      },
+      {
         year: "2019",
-        title: "First principle",
-        description: "Foundation built on trust and transparency.",
+        title: "Manipal Technologies partnership",
+        description: "Manipal wins major bank tenders and has no service team. IMU steps in — a perfect demonstration of Dare at scale, servicing machines and customers far beyond the original brand.",
       },
       {
         year: "2020",
-        title: "Resilience proven",
-        description: "Team and systems survive pandemic pressure test.",
+        title: "COVID — values under fire",
+        description: "Engineers cycle and walk to bank branches through lockdown. 3,000 kiosks installed mid-pandemic. Not a single frontline salary is cut — maximum deductions fall on management. Care and Fair made real.",
       },
       {
-        year: "2021",
-        title: "Network expands",
-        description:
-          "Pan-India reach achieved through disciplined vendor partnerships.",
+        year: "2022",
+        title: "The ₹500 lesson",
+        description: "An engineer passes leads to a dealer offering ₹1,200 — the company paid only ₹500. Instead of firing him, the team listens. They fly to four cities and redesign profit-sharing with the people doing the work. 80% to field. 20% to back office. Everyone benefits from every sale.",
       },
     ],
   },
   movement: {
-    narrativeTitle: "Movement is momentum. From crisis to culture.",
-    narrative: "What started as survival became a deliberate choice to lead with culture at the center.",
+    narrativeTitle: "The Movement",
+    narrative: "When a promoter tried to claim IMU as proprietary, the founder chose liberation instead. In October 2023, everyone who had shaped IMU gathered in one room and set it free. No one owns it. Any business, any person who believes in Care, Fair, Dare — can adopt it.",
+    narrativeFooter: "\"The journey may be long, but the spirit is strong.\"",
     timeline: [
       {
-        year: "2022",
-        title: "Culture codified",
-        description: "Happy I. Happy U. principles become organizational DNA.",
+        year: "Mar 2023",
+        title: "Setback and refocus",
+        description: "Manipal Technologies exits. A major setback — but it forces the team back to fundamentals. Culture over contracts. Values before volume. The processes that eroded during COVID are rebuilt.",
       },
       {
-        year: "2023",
-        title: "Scaled impact",
-        description:
-          "Multi-hundred engineer team operating with unified values.",
+        year: "Oct 2023",
+        title: "IMU is set free",
+        description: "The founder gathers everyone who shaped IMU — engineers, managers, back office — into one room. IMU is collectively owned and set free. No one person holds it. No company can claim it.",
       },
       {
         year: "2024",
-        title: "Category leader",
-        description:
-          "IMU Way recognized as differentiator in competitive market.",
+        title: "Culture deepens",
+        description: "Regular training in soft skills, human skills and sales. Zonal executives support field staff across four zones. The three improvement areas — process, mindset, culture — are worked on together.",
+      },
+      {
+        year: "2025",
+        title: "The vision ahead",
+        description: "An engineer in every district of India. 736 districts. Jobs everywhere. And at the end of a machine's life — an Antim Sanskar — responsible e-waste processing that returns every component to the earth with dignity.",
       },
     ],
   },
@@ -102,17 +126,27 @@ export function IMUJourney() {
     "crisis",
   );
 
+  const sectionRef = useRef<HTMLElement>(null);
+
   const handleTabChange = (
     _event: React.SyntheticEvent,
     newValue: "crisis" | "values" | "movement",
   ) => {
     setActiveTab(newValue);
+    
+    // Scroll to the top of the section when tab changes
+    if (sectionRef.current) {
+      const yOffset = -20; // Slight offset to account for sticky header breathing room
+      const y = sectionRef.current.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: "smooth" });
+    }
   };
 
   const currentData = journeyData[activeTab];
 
   return (
     <Box
+      ref={sectionRef}
       component="section"
       sx={{
         width: "100%",
@@ -121,74 +155,88 @@ export function IMUJourney() {
       }}
     >
       <Box sx={{ width: "min(94%, 1240px)", mx: "auto" }}>
-        {/* Heading */}
-        <FadeInView direction="up">
-          <Typography
-            sx={{
-              fontFamily: (theme) => theme.imu.typography.fontFamilies.primary,
-              fontWeight: 700,
-              fontSize: "48px",
-              lineHeight: "100%",
-              letterSpacing: "0%",
-              textAlign: "center",
-              color: "#1E2330",
-              mb: { xs: 6, md: 8 },
-            }}
-          >
-            IMU Way Journey
-          </Typography>
-        </FadeInView>
-
-        {/* Tabs */}
-        <FadeInView direction="up" delay={0.1}>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              mb: { xs: 6, md: 8 },
-            }}
-          >
-            <Tabs
-              value={activeTab}
-              onChange={handleTabChange}
+        {/* Sticky Header Group: Title & Tabs */}
+        <Box
+          sx={{
+            position: "sticky",
+            top: "80px",
+            zIndex: 10,
+            backgroundColor: "#ffffff",
+            pt: 2,
+            pb: 2,
+            // Negative margins to ensure background mask spans the container width
+            mx: { xs: -2, md: -3 },
+            px: { xs: 2, md: 3 },
+          }}
+        >
+          {/* Heading */}
+          <FadeInView direction="up">
+            <Typography
               sx={{
-                "& .MuiTab-root": {
-                  fontFamily: (theme) =>
-                    theme.imu.typography.fontFamilies.primary,
-                  fontWeight: 700,
-                  fontSize: "20px",
-                  lineHeight: "150%",
-                  letterSpacing: "2%",
-                  textTransform: "none",
-                  minWidth: "auto",
-                  px: 3,
-                  py: 1.5,
-                  mx: 1,
-                  border: "2px solid transparent",
-                  borderRadius: "8px",
-                  backgroundColor: "#F0F0F0",
-                  color: "#6A6A6A",
-                  transition: "all 0.3s ease",
-                  "&.Mui-selected": {
-                    backgroundColor: tabColors[activeTab].bg,
-                    color: "#1E2330",
-                    borderColor: tabColors[activeTab].border,
-                  },
-                  "&:hover": {
-                    backgroundColor: "#E8E8E8",
-                  },
-                },
-                "& .MuiTabs-indicator": {
-                  display: "none",
-                },
+                fontFamily: (theme) => theme.imu.typography.fontFamilies.primary,
+                fontWeight: 700,
+                fontSize: "48px",
+                lineHeight: "100%",
+                letterSpacing: "0%",
+                textAlign: "center",
+                color: "#1E2330",
+                mb: { xs: 4, md: 6 },
               }}
             >
-              <Tab label="The Crisis" value="crisis" />
-              <Tab label="The Values" value="values" />
-              <Tab label="The Movement" value="movement" />
-            </Tabs>
-          </Box>
-        </FadeInView>
+              IMU Way Journey
+            </Typography>
+          </FadeInView>
+
+          {/* Tabs */}
+          <FadeInView direction="up" delay={0.1}>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <Tabs
+                value={activeTab}
+                onChange={handleTabChange}
+                sx={{
+                  "& .MuiTab-root": {
+                    fontFamily: (theme) =>
+                      theme.imu.typography.fontFamilies.primary,
+                    fontWeight: 700,
+                    fontSize: "20px",
+                    lineHeight: "150%",
+                    letterSpacing: "2%",
+                    textTransform: "none",
+                    minWidth: "auto",
+                    px: 3,
+                    py: 1.5,
+                    mx: 1,
+                    border: "2px solid transparent",
+                    borderRadius: "8px",
+                    backgroundColor: "#F0F0F0",
+                    color: "#6A6A6A",
+                    transition: "all 0.3s ease",
+                    "&.Mui-selected": {
+                      backgroundColor: tabColors[activeTab].bg,
+                      color: "#1E2330",
+                      borderColor: tabColors[activeTab].border,
+                    },
+                    "&:hover": {
+                      backgroundColor: "#E8E8E8",
+                    },
+                  },
+                  "& .MuiTabs-indicator": {
+                    display: "none",
+                  },
+                }}
+              >
+                <Tab label="The Crisis" value="crisis" />
+                <Tab label="The Values" value="values" />
+                <Tab label="The Movement" value="movement" />
+              </Tabs>
+            </Box>
+          </FadeInView>
+        </Box>
 
         {/* Content Grid */}
         <Box
@@ -197,10 +245,18 @@ export function IMUJourney() {
             gridTemplateColumns: { xs: "1fr", lg: "1fr 1fr" },
             gap: { xs: 6, md: 8, lg: 10 },
             alignItems: "flex-start",
+            mt: 6,
           }}
         >
           {/* Left Column - Narrative */}
-          <Box>
+          <Box 
+            key={activeTab}
+            sx={{
+              position: { xs: "relative", lg: "sticky" },
+              top: { xs: 0, lg: "260px" },
+              alignSelf: "start",
+            }}
+          >
             <FadeInView direction="up" delay={0.2}>
               {currentData.narrativeTitle && (
                 <Typography
@@ -273,6 +329,7 @@ export function IMUJourney() {
 
             {/* Timeline Items */}
             <Box
+              key={activeTab}
               sx={{
                 display: "flex",
                 flexDirection: "column",
@@ -294,8 +351,8 @@ export function IMUJourney() {
                         width: "24px",
                         height: "24px",
                         minWidth: "24px",
-                        backgroundColor: "#D9D9D9",
-                        border: "1px solid #1E2330",
+                        backgroundColor: tabColors[activeTab].bg,
+                        border: `1px solid ${tabColors[activeTab].border}`,
                         borderRadius: "50%",
                         display: "flex",
                         alignItems: "center",

@@ -44,6 +44,10 @@ interface StepData {
   subtitle?: string;
   icon?: React.ReactNode;
   toneColor?: string;
+  isBigTitleBox?: boolean;
+  cta?: string;
+  variant?: "light" | "dark";
+  bgColor?: string;
 }
 
 const stepsData: StepData[] = [
@@ -55,17 +59,6 @@ const stepsData: StepData[] = [
   },
   {
     id: 1,
-    topText: "At its core, IMU means:",
-    title: '"I AM YOU!"',
-  },
-  {
-    id: 2,
-    topText: "It reminds us that the way we treat others reflects who we are within.",
-    title: 'IMU is not about rules.',
-    description: "It is about awareness, responsibility, and conscious living.'"
-  },
-  {
-    id: 3,
     icon: <img src={careLogo} alt="Care" style={{ width: "64px", height: "40px" }} />,
     title: "Care",
     subtitle: "The Heart of Service, Compassion, & Resilience",
@@ -74,7 +67,7 @@ const stepsData: StepData[] = [
     toneColor: "#5074B6",
   },
   {
-    id: 4,
+    id: 2,
     icon: <img src={fairLogo} alt="Fair" style={{ width: "48px", height: "40px" }} />,
     title: "Fair",
     subtitle: "The Foundation of Trust, Credibility, & Transparency",
@@ -83,7 +76,7 @@ const stepsData: StepData[] = [
     toneColor: "#648F6C",
   },
   {
-    id: 5,
+    id: 3,
     icon: <img src={dareLogo} alt="Dare" style={{ width: "40px", height: "40px" }} />,
     title: "Dare",
     subtitle: "The Spirit of Growth, Courage, & Prosperity",
@@ -92,8 +85,19 @@ const stepsData: StepData[] = [
     toneColor: "#bd5201",
   },
   {
-    id: 6,
+    id: 4,
+    topText: "At its core, IMU means:",
+    title: '"I AM YOU!"',
+    isBigTitleBox: true,
+    description: "It reminds us that the way we treat others reflects who we are within.",
+    subDescription: "IMU is not about rules. It is about awareness, responsibility, and conscious living.",
+    cta: "KNOW IMU WAY OF LIFE",
+    toneColor: "#EADDC1", // subtle warm tone for the box
+  },
+  {
+    id: 5,
     subDescription: "IMU stands for Install, Maintain, Upgrade.\n It is a method designed to build strong values that guide our thoughts, emotions, decisions, and actions.",
+    bgColor: "#FEF8E5",
   },
 ];
 
@@ -250,26 +254,30 @@ export function WhatIsIMU() {
           />
 
           {/* Orbiting icons — each one springs along the arc via angle animation */}
-          {stepsData.map((step, index) => {
-            const targetAngle =
-              ACTIVE_ANGLE_DEG + (activeStep - index) * ANGLE_STEP_DEG;
+          {stepsData
+            .filter((s) => s.id !== 0) // What is IMU text section doesn't need an orbiting icon
+            .map((step, _index) => {
+              // Note: We use the original step.id for targetAngle calculation 
+              // to maintain the correct spacing relative to other items
+              const targetAngle =
+                ACTIVE_ANGLE_DEG + (activeStep - step.id) * ANGLE_STEP_DEG;
 
-            return (
-              <OrbitIcon
-                key={`orbit-${step.id}`}
-                targetAngle={targetAngle}
-                isActive={activeStep === step.id}
-                icon={step.icon}
-                toneColor={step.toneColor}
-              />
-            );
-          })}
+              return (
+                <OrbitIcon
+                  key={`orbit-${step.id}`}
+                  targetAngle={targetAngle}
+                  isActive={activeStep === step.id}
+                  icon={step.icon}
+                  toneColor={step.toneColor}
+                />
+              );
+            })}
         </Box>
 
         {/* ── Right: Scrolling content cards ─────────────────────────── */}
         <Box
           sx={{
-            py: { xs: 8, md: "50vh" },
+            py: { xs: 8, md: "15vh" },
             px: { xs: 3, md: 6 },
             position: "relative",
             zIndex: 2,
@@ -278,103 +286,230 @@ export function WhatIsIMU() {
             gap: "20vh",
           }}
         >
+          {/* STICKY HEADER FOR STEP 0 */}
+          <Box
+            sx={{
+              position: "sticky",
+              top: 0,
+              zIndex: 10,
+              pointerEvents: "none",
+              mb: "-20vh", // offset so it doesn't push down the first spacer box
+              // Create a solid mask all the way to the top of the viewport
+              mx: { xs: -3, md: -6 },
+              px: { xs: 3, md: 6 },
+              pt: "140px", // Visual placement of the text
+              pb: 6,
+              background: "linear-gradient(to bottom, #f5f8fc 85%, rgba(245,248,252,0) 100%)",
+            }}
+          >
+            <Box
+              sx={{
+                maxWidth: "720px",
+                mx: "auto",
+              }}
+            >
+              <Typography
+                sx={{
+                  color: "#1E2330",
+                  fontFamily: (theme) =>
+                    theme.imu.typography.fontFamilies.primary,
+                  fontWeight: 700,
+                  fontSize: { xs: "32px", md: "40px" },
+                  mb: 2,
+                }}
+              >
+                {stepsData[0].title}
+              </Typography>
+
+              <Typography
+                sx={{
+                  color: "text.primary",
+                  fontFamily: (theme) =>
+                    theme.imu.typography.fontFamilies.secondary,
+                  fontSize: "18px",
+                  lineHeight: 1.6,
+                }}
+              >
+                {stepsData[0].description}
+              </Typography>
+            </Box>
+          </Box>
+
           {stepsData.map((step) => (
             <WhatIsIMUCard
               key={`card-${step.id}`}
               id={step.id}
               onVisible={handleVisible}
               isActive={activeStep === step.id}
-            >{step.topText && (
-              <Typography
-                sx={{
-                  color: "#6A6A6A",
-                  fontFamily: (theme) =>
-                    theme.imu.typography.fontFamilies.secondary,
-                  fontSize: "14px",
-                }}
-              >
-                {step.topText}
-              </Typography>
-            )}
-              <Box sx={{ display: "flex", flexDirection: "column", gap: 0 }}>
-                <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>{step.icon && (
-                  <Box
-                    sx={{
-                      width: "40px",
-                      height: "40px",
-                      borderRadius: "50%",
-                      backgroundColor: "#dce5f9",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      color: step.toneColor ?? "inherit",
-                    }}
-                  >
-                    {step.icon}
-                  </Box>
-
-                )}
-                  {step.title && (
+              toneColor={step.toneColor}
+              isTransparentSpacer={step.id === 0}
+              variant={step.variant}
+              bgColor={step.bgColor}
+            >
+              {step.id !== 0 && (
+                <>
+                  {step.topText && (
                     <Typography
                       sx={{
-                        color: step.toneColor ?? "text.primary",
+                        color: "#6A6A6A",
                         fontFamily: (theme) =>
-                          theme.imu.typography.fontFamilies.primary,
-                        fontWeight: 700,
-                        whiteSpace: "pre-wrap",
-                        fontSize: { xs: "28px", md: "32px" },
-                        // lineHeight: 1.2,
-                        // mt: 2
+                          theme.imu.typography.fontFamilies.secondary,
+                        fontSize: "14px",
                       }}
                     >
-                      {step.title}
+                      {step.topText}
                     </Typography>
                   )}
-                </Box>
-                {step.subtitle && (
-                  <Typography
-                    sx={{
-                      color: "text.secondary",
-                      fontFamily: (theme) =>
-                        theme.imu.typography.fontFamilies.primary,
-                      fontSize: "24px",
-                      fontWeight: 400
-                    }}
-                  >
-                    {step.subtitle}
-                  </Typography>
-                )}
+                  <Box sx={{ display: "flex", flexDirection: "column", gap: 0 }}>
+                    {step.title && (
+                      <>
+                        {step.isBigTitleBox ? (
+                          <Box
+                            sx={{
+                              width: "100%",
+                              height: "180px",
+                              borderRadius: "100px",
+                              border: "1px solid #1E2330",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              background: "linear-gradient(135deg, #FFF6E5 0%, #FFFFFF 50%, #FFF6E5 100%)",
+                              boxShadow: "0px 4px 20px rgba(0,0,0,0.03)",
+                              my: 2
+                            }}
+                          >
+                            <Typography
+                              sx={{
+                                color: "#1E2330",
+                                fontFamily: (theme) =>
+                                  theme.imu.typography.fontFamilies.primary,
+                                fontWeight: 700,
+                                fontSize: { xs: "40px", md: "52px" },
+                                textAlign: "center",
+                              }}
+                            >
+                              {step.title}
+                            </Typography>
+                          </Box>
+                        ) : (
+                          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                            {step.icon && (
+                              <Box
+                                sx={{
+                                  width: "40px",
+                                  height: "40px",
+                                  borderRadius: "50%",
+                                  backgroundColor: "#dce5f9",
+                                  display: "flex",
+                                  alignItems: "center",
+                                  justifyContent: "center",
+                                  color: step.toneColor ?? "inherit",
+                                }}
+                              >
+                                {step.icon}
+                              </Box>
+                            )}
+                            <Typography
+                              sx={{
+                                color: step.toneColor ?? "text.primary",
+                                fontFamily: (theme) =>
+                                  theme.imu.typography.fontFamilies.primary,
+                                fontWeight: 700,
+                                whiteSpace: "pre-wrap",
+                                fontSize: { xs: "28px", md: "32px" },
+                              }}
+                            >
+                              {step.title}
+                            </Typography>
+                          </Box>
+                        )}
+                      </>
+                    )}
 
-                {step.description && (
-                  <Typography
-                    sx={{
-                      color: "text.primary",
-                      fontFamily: (theme) =>
-                        theme.imu.typography.fontFamilies.secondary,
-                      fontSize: "16px",
-                      // lineHeight: 1.6,
-                    }}
-                  >
-                    {step.description}
-                  </Typography>
-                )}
+                    {step.subtitle && (
+                      <Typography
+                        sx={{
+                          color: step.variant === "dark" ? "rgba(255,255,255,0.7)" : "text.secondary",
+                          fontFamily: (theme) =>
+                            theme.imu.typography.fontFamilies.primary,
+                          fontSize: "24px",
+                          fontWeight: 400
+                        }}
+                      >
+                        {step.subtitle}
+                      </Typography>
+                    )}
 
-                {step.subDescription && (
-                  <Typography
-                    sx={{
-                      color: "text.secondary",
-                      fontFamily: (theme) =>
-                        theme.imu.typography.fontFamilies.secondary,
-                      fontSize: "16px",
-                      fontWeight: 500,
-                      fontStyle: "italic",
-                      
-                    }}
-                  >
-                    {step.subDescription}
-                  </Typography>
+                    {step.description && (
+                      <Typography
+                        sx={{
+                          color: step.variant === "dark" ? "#ffffff" : "text.primary",
+                          fontFamily: (theme) =>
+                            theme.imu.typography.fontFamilies.secondary,
+                          fontSize: "16px",
+                        }}
+                      >
+                        {step.description}
+                      </Typography>
+                    )}
+
+                    {step.subDescription && (
+                      <Typography
+                        sx={{
+                          color: step.variant === "dark" ? "rgba(255,255,255,0.7)" : "text.secondary",
+                          fontFamily: (theme) =>
+                            theme.imu.typography.fontFamilies.secondary,
+                          fontSize: "16px",
+                          fontWeight: 500,
+                        }}
+                      >
+                        {step.id === 4 ? (
+                          <>
+                            <Box component="span" sx={{ fontStyle: "italic", fontWeight: 700, color: "text.primary" }}>
+                              IMU is not about rules.
+                            </Box>
+                            {" It is about awareness, responsibility, and conscious living."}
+                          </>
+                        ) : (
+                          step.subDescription
+                        )}
+                      </Typography>
+                    )}
+
+                    {step.cta && (
+                      <Box sx={{ mt: 2 }}>
+                        <Box
+                          component="button"
+                          sx={{
+                            backgroundColor: "#1E2330",
+                            color: "#fff",
+                            borderRadius: "99px",
+                            px: 3,
+                            py: 1.2,
+                            fontSize: "13px",
+                            fontWeight: 600,
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 1,
+                            border: "none",
+                            cursor: "pointer",
+                            textTransform: "uppercase",
+                            letterSpacing: "0.5px",
+                            transition: "all 0.2s ease",
+                            "&:hover": {
+                              backgroundColor: "#2a3142",
+                              transform: "translateY(-1px)",
+                            }
+                          }}
+                        >
+                          {step.cta}
+                          <Box component="span" sx={{ fontSize: "16px" }}> ›</Box>
+                        </Box>
+                      </Box>
                 )}
               </Box>
+            </>
+          )}
             </WhatIsIMUCard>
           ))}
         </Box>
