@@ -3,7 +3,7 @@ import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
 import { useState, useRef } from "react";
-import { FadeInView } from "../ui/FadeInView";
+import { FadeInView } from "../../components/ui/FadeInView";
 
 interface TimelineItem {
   year: string;

@@ -55,11 +55,17 @@ const stepsData: StepData[] = [
     id: 0,
     title: "What is IMU?",
     description:
-      '“IMU is a way of life, driven by core human values of Care, Fair and Dare in our emotions, actions, decision and in making choices for being happy, both I and U” – That is It',
+      "“IMU is a way of life, driven by core human values of Care, Fair and Dare in our emotions, actions, decision and in making choices for being happy, both I and U” – That is It",
   },
   {
     id: 1,
-    icon: <img src={careLogo} alt="Care" style={{ width: "64px", height: "40px" }} />,
+    icon: (
+      <img
+        src={careLogo}
+        alt="Care"
+        style={{ width: "64px", height: "40px" }}
+      />
+    ),
     title: "Care",
     subtitle: "The Heart of Service, Compassion, & Resilience",
     description:
@@ -68,7 +74,13 @@ const stepsData: StepData[] = [
   },
   {
     id: 2,
-    icon: <img src={fairLogo} alt="Fair" style={{ width: "48px", height: "40px" }} />,
+    icon: (
+      <img
+        src={fairLogo}
+        alt="Fair"
+        style={{ width: "48px", height: "40px" }}
+      />
+    ),
     title: "Fair",
     subtitle: "The Foundation of Trust, Credibility, & Transparency",
     description:
@@ -77,7 +89,13 @@ const stepsData: StepData[] = [
   },
   {
     id: 3,
-    icon: <img src={dareLogo} alt="Dare" style={{ width: "40px", height: "40px" }} />,
+    icon: (
+      <img
+        src={dareLogo}
+        alt="Dare"
+        style={{ width: "40px", height: "40px" }}
+      />
+    ),
     title: "Dare",
     subtitle: "The Spirit of Growth, Courage, & Prosperity",
     description:
@@ -89,14 +107,17 @@ const stepsData: StepData[] = [
     topText: "At its core, IMU means:",
     title: '"I AM YOU!"',
     isBigTitleBox: true,
-    description: "It reminds us that the way we treat others reflects who we are within.",
-    subDescription: "IMU is not about rules. It is about awareness, responsibility, and conscious living.",
+    description:
+      "It reminds us that the way we treat others reflects who we are within.",
+    subDescription:
+      "IMU is not about rules. It is about awareness, responsibility, and conscious living.",
     cta: "KNOW IMU WAY OF LIFE",
     toneColor: "#EADDC1", // subtle warm tone for the box
   },
   {
     id: 5,
-    subDescription: "IMU stands for Install, Maintain, Upgrade.\n It is a method designed to build strong values that guide our thoughts, emotions, decisions, and actions.",
+    subDescription:
+      "IMU stands for Install, Maintain, Upgrade.\n It is a method designed to build strong values that guide our thoughts, emotions, decisions, and actions.",
     bgColor: "#FEF8E5",
   },
 ];
@@ -216,10 +237,7 @@ export function WhatIsIMU() {
   }, []);
 
   return (
-    <Box
-      component="section"
-      sx={{ width: "100%", backgroundColor: "#f5f8fc" }}
-    >
+    <Box component="section" sx={{ width: "100%", backgroundColor: "#f5f8fc" }}>
       <Box
         sx={{
           display: "grid",
@@ -257,7 +275,7 @@ export function WhatIsIMU() {
           {stepsData
             .filter((s) => s.id !== 0) // What is IMU text section doesn't need an orbiting icon
             .map((step, _index) => {
-              // Note: We use the original step.id for targetAngle calculation 
+              // Note: We use the original step.id for targetAngle calculation
               // to maintain the correct spacing relative to other items
               const targetAngle =
                 ACTIVE_ANGLE_DEG + (activeStep - step.id) * ANGLE_STEP_DEG;
@@ -299,7 +317,8 @@ export function WhatIsIMU() {
               px: { xs: 3, md: 6 },
               pt: "140px", // Visual placement of the text
               pb: 6,
-              background: "linear-gradient(to bottom, #f5f8fc 85%, rgba(245,248,252,0) 100%)",
+              background:
+                "linear-gradient(to bottom, #f5f8fc 85%, rgba(245,248,252,0) 100%)",
             }}
           >
             <Box
@@ -360,7 +379,9 @@ export function WhatIsIMU() {
                       {step.topText}
                     </Typography>
                   )}
-                  <Box sx={{ display: "flex", flexDirection: "column", gap: 0 }}>
+                  <Box
+                    sx={{ display: "flex", flexDirection: "column", gap: 0 }}
+                  >
                     {step.title && (
                       <>
                         {step.isBigTitleBox ? (
@@ -373,9 +394,10 @@ export function WhatIsIMU() {
                               display: "flex",
                               alignItems: "center",
                               justifyContent: "center",
-                              background: "linear-gradient(135deg, #FFF6E5 0%, #FFFFFF 50%, #FFF6E5 100%)",
+                              background:
+                                "linear-gradient(135deg, #FFF6E5 0%, #FFFFFF 50%, #FFF6E5 100%)",
                               boxShadow: "0px 4px 20px rgba(0,0,0,0.03)",
-                              my: 2
+                              my: 2,
                             }}
                           >
                             <Typography
@@ -392,7 +414,13 @@ export function WhatIsIMU() {
                             </Typography>
                           </Box>
                         ) : (
-                          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                          <Box
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 2,
+                            }}
+                          >
                             {step.icon && (
                               <Box
                                 sx={{
@@ -429,11 +457,14 @@ export function WhatIsIMU() {
                     {step.subtitle && (
                       <Typography
                         sx={{
-                          color: step.variant === "dark" ? "rgba(255,255,255,0.7)" : "text.secondary",
+                          color:
+                            step.variant === "dark"
+                              ? "rgba(255,255,255,0.7)"
+                              : "text.secondary",
                           fontFamily: (theme) =>
                             theme.imu.typography.fontFamilies.primary,
                           fontSize: "24px",
-                          fontWeight: 400
+                          fontWeight: 400,
                         }}
                       >
                         {step.subtitle}
@@ -443,7 +474,10 @@ export function WhatIsIMU() {
                     {step.description && (
                       <Typography
                         sx={{
-                          color: step.variant === "dark" ? "#ffffff" : "text.primary",
+                          color:
+                            step.variant === "dark"
+                              ? "#ffffff"
+                              : "text.primary",
                           fontFamily: (theme) =>
                             theme.imu.typography.fontFamilies.secondary,
                           fontSize: "16px",
@@ -456,7 +490,10 @@ export function WhatIsIMU() {
                     {step.subDescription && (
                       <Typography
                         sx={{
-                          color: step.variant === "dark" ? "rgba(255,255,255,0.7)" : "text.secondary",
+                          color:
+                            step.variant === "dark"
+                              ? "rgba(255,255,255,0.7)"
+                              : "text.secondary",
                           fontFamily: (theme) =>
                             theme.imu.typography.fontFamilies.secondary,
                           fontSize: "16px",
@@ -465,10 +502,19 @@ export function WhatIsIMU() {
                       >
                         {step.id === 4 ? (
                           <>
-                            <Box component="span" sx={{ fontStyle: "italic", fontWeight: 700, color: "text.primary" }}>
+                            <Box
+                              component="span"
+                              sx={{
+                                fontStyle: "italic",
+                                fontWeight: 700,
+                                color: "text.primary",
+                              }}
+                            >
                               IMU is not about rules.
                             </Box>
-                            {" It is about awareness, responsibility, and conscious living."}
+                            {
+                              " It is about awareness, responsibility, and conscious living."
+                            }
                           </>
                         ) : (
                           step.subDescription
@@ -499,17 +545,20 @@ export function WhatIsIMU() {
                             "&:hover": {
                               backgroundColor: "#2a3142",
                               transform: "translateY(-1px)",
-                            }
+                            },
                           }}
                         >
                           {step.cta}
-                          <Box component="span" sx={{ fontSize: "16px" }}> ›</Box>
+                          <Box component="span" sx={{ fontSize: "16px" }}>
+                            {" "}
+                            ›
+                          </Box>
                         </Box>
                       </Box>
-                )}
-              </Box>
-            </>
-          )}
+                    )}
+                  </Box>
+                </>
+              )}
             </WhatIsIMUCard>
           ))}
         </Box>

@@ -1,10 +1,10 @@
 import Box from "@mui/material/Box";
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Hero } from "../components/hero/Hero";
-import { WhyIMU } from "../components/whyIMU/WhyIMU";
-import { WhatIsIMU } from "../components/whatIsIMU/WhatIsIMU";
-import { IMUInPratice } from "../components/IMUInPratice/IMUInPratice";
+import { Hero } from "../components/landingPage/Hero";
+import { WhyIMU } from "../components/landingPage/WhyIMU";
+import { WhatIsIMU } from "../components/landingPage/WhatIsIMU";
+import { IMUInPratice } from "../components/landingPage/IMUInPratice";
 
 type LandingLocationState = {
   scrollTo?: string;
