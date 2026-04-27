@@ -2,6 +2,8 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { primaryColors, secondaryColors } from "../../theme/theme";
 import { FadeInView } from "../ui/FadeInView";
+import { BlueShadow } from "../ui/BlueShadow";
+import { GreenShadow } from "../ui/GreenShadow";
 
 // ─── Card Data ─────────────────────────────────────────────────────────────────
 
@@ -9,8 +11,7 @@ const cards = [
   {
     id: "service-delivery",
     tag: "Service Delivery",
-    titleColor: primaryColors.primary,          // blue
-    blobColor: "#9AB4FF",                        // blue blob per spec
+    titleColor: primaryColors.primary, // blue
     buttonBg: primaryColors.primaryDark,
     title: "When Your Team Feels It, Your Clients See It",
     body: "Most service problems are not technical. They are cultural. IMU Way of Service Delivery helps businesses build a team that shows up with Care, works with Fairness, and grows with Courage. Not because they are told to. Because they actually believe it.",
@@ -19,8 +20,7 @@ const cards = [
   {
     id: "imu-way-of-life",
     tag: "IMU Way of Life",
-    titleColor: secondaryColors.secondary,       // green
-    blobColor: "#A1F78D",                        // green blob per spec
+    titleColor: secondaryColors.secondary, // green
     buttonBg: "#2d4a31",
     title: "Values Are Useless Until They Become Habits",
     body: "The IMU Chakra is a step by step process that takes your values off the wall and puts them into daily behaviour. From how you greet a client to how you handle a complaint, every action gets rooted in something real. This is where culture actually gets built.",
@@ -41,14 +41,14 @@ export function IMUInPratice() {
       }}
     >
       <Box sx={{ width: "min(94%, 1240px)", mx: "auto" }}>
-
         {/* ── Section heading ──────────────────────────────────────────── */}
         <FadeInView direction="up">
           <Box sx={{ textAlign: "center", mb: { xs: 7, md: 10 } }}>
             <Typography
               component="h2"
               sx={{
-                fontFamily: (theme) => theme.imu.typography.fontFamilies.primary,
+                fontFamily: (theme) =>
+                  theme.imu.typography.fontFamilies.primary,
                 fontWeight: 700,
                 fontSize: { xs: "36px", md: "48px" },
                 lineHeight: 1.1,
@@ -60,7 +60,8 @@ export function IMUInPratice() {
             </Typography>
             <Typography
               sx={{
-                fontFamily: (theme) => theme.imu.typography.fontFamilies.secondary,
+                fontFamily: (theme) =>
+                  theme.imu.typography.fontFamilies.secondary,
                 fontSize: { xs: "15px", md: "17px" },
                 color: "#717171",
                 lineHeight: 1.6,
@@ -97,129 +98,110 @@ export function IMUInPratice() {
                   height: "100%",
                 }}
               >
-              {/*
-               * Background blur blob — per spec:
-               *   background: {blobColor}
-               *   backdrop-filter: blur(64px)  ← applied via filter on a pseudo-layer
-               *   border-radius: 9999px
-               *   opacity: 0.2
-               *
-               * We use a large pill element positioned behind the content.
-               * CSS `filter: blur(64px)` on this element creates the soft wash effect.
-               */}
-              <Box
-                aria-hidden
-                sx={{
-                  position: "absolute",
-                  // Anchor to the bottom-left corner.
-                  // Negative values push the circle's edge slightly outside
-                  // the card so the blur wash starts right at the corner.
-                  bottom: "-90%",
-                  left: "-10%",
-                  // ~65% of card width → a medium-sized soft circle that
-                  // covers the bottom-left quadrant and fades toward top-right.
-                  width: "85%",
-                  aspectRatio: "1 / 1",
-                  borderRadius: "9999px",
-                  background: card.blobColor,
-                  filter: "blur(64px)",
-                  opacity: 0.2,
-                  zIndex: 0,
-                  pointerEvents: "none",
-                }}
-              />
+                {card.id === "service-delivery" ? (
+                  <BlueShadow top="85%" right="10%" />
+                ) : (
+                  <GreenShadow top="85%" right="10%" />
+                )}
 
-              {/* Card content sits above the blob */}
-              <Box sx={{ position: "relative", zIndex: 1, display: "flex", flexDirection: "column", gap: 3 }}>
+                {/* Card content sits above the blob */}
+                <Box
+                  sx={{
+                    position: "relative",
+                    zIndex: 1,
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 3,
+                  }}
+                >
+                  {/* Tag badge */}
+                  <Box sx={{ display: "inline-flex" }}>
+                    <Box
+                      sx={{
+                        px: 2,
+                        py: 0.6,
+                        borderRadius: "9999px",
+                        backgroundColor: "rgba(0,0,0,0.06)",
+                        display: "inline-block",
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          fontFamily: (theme) =>
+                            theme.imu.typography.fontFamilies.secondary,
+                          fontSize: "12px",
+                          color: "#434343",
+                          fontWeight: 500,
+                        }}
+                      >
+                        {card.tag}
+                      </Typography>
+                    </Box>
+                  </Box>
 
-                {/* Tag badge */}
-                <Box sx={{ display: "inline-flex" }}>
-                  <Box
+                  {/* Title */}
+                  <Typography
                     sx={{
-                      px: 2,
-                      py: 0.6,
-                      borderRadius: "9999px",
-                      backgroundColor: "rgba(0,0,0,0.06)",
-                      display: "inline-block",
+                      fontFamily: (theme) =>
+                        theme.imu.typography.fontFamilies.primary,
+                      fontWeight: 700,
+                      fontSize: { xs: "24px", md: "28px" },
+                      lineHeight: 1.25,
+                      color: card.titleColor,
                     }}
                   >
-                    <Typography
+                    {card.title}
+                  </Typography>
+
+                  {/* Body */}
+                  <Typography
+                    sx={{
+                      fontFamily: (theme) =>
+                        theme.imu.typography.fontFamilies.secondary,
+                      fontSize: { xs: "14px", md: "15px" },
+                      color: "#434343",
+                      lineHeight: 1.75,
+                      flexGrow: 1,
+                    }}
+                  >
+                    {card.body}
+                  </Typography>
+
+                  {/* CTA button */}
+                  <Box>
+                    <Box
+                      component="button"
                       sx={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        px: 3.5,
+                        py: 1.6,
+                        borderRadius: "9999px",
+                        backgroundColor: card.buttonBg,
+                        color: "#ffffff",
+                        border: "none",
+                        cursor: "pointer",
                         fontFamily: (theme) =>
                           theme.imu.typography.fontFamilies.secondary,
                         fontSize: "12px",
-                        color: "#434343",
-                        fontWeight: 500,
+                        fontWeight: 700,
+                        letterSpacing: "0.1em",
+                        textTransform: "uppercase",
+                        transition: "opacity 0.2s ease, transform 0.2s ease",
+                        "&:hover": {
+                          opacity: 0.88,
+                          transform: "translateY(-1px)",
+                        },
+                        "&:active": {
+                          transform: "translateY(0)",
+                        },
                       }}
                     >
-                      {card.tag}
-                    </Typography>
-                  </Box>
-                </Box>
-
-                {/* Title */}
-                <Typography
-                  sx={{
-                    fontFamily: (theme) =>
-                      theme.imu.typography.fontFamilies.primary,
-                    fontWeight: 700,
-                    fontSize: { xs: "24px", md: "28px" },
-                    lineHeight: 1.25,
-                    color: card.titleColor,
-                  }}
-                >
-                  {card.title}
-                </Typography>
-
-                {/* Body */}
-                <Typography
-                  sx={{
-                    fontFamily: (theme) =>
-                      theme.imu.typography.fontFamilies.secondary,
-                    fontSize: { xs: "14px", md: "15px" },
-                    color: "#434343",
-                    lineHeight: 1.75,
-                    flexGrow: 1,
-                  }}
-                >
-                  {card.body}
-                </Typography>
-
-                {/* CTA button */}
-                <Box>
-                  <Box
-                    component="button"
-                    sx={{
-                      display: "inline-flex",
-                      alignItems: "center",
-                      px: 3.5,
-                      py: 1.6,
-                      borderRadius: "9999px",
-                      backgroundColor: card.buttonBg,
-                      color: "#ffffff",
-                      border: "none",
-                      cursor: "pointer",
-                      fontFamily: (theme) =>
-                        theme.imu.typography.fontFamilies.secondary,
-                      fontSize: "12px",
-                      fontWeight: 700,
-                      letterSpacing: "0.1em",
-                      textTransform: "uppercase",
-                      transition: "opacity 0.2s ease, transform 0.2s ease",
-                      "&:hover": {
-                        opacity: 0.88,
-                        transform: "translateY(-1px)",
-                      },
-                      "&:active": {
-                        transform: "translateY(0)",
-                      },
-                    }}
-                  >
-                    {card.cta}
+                      {card.cta}
+                    </Box>
                   </Box>
                 </Box>
               </Box>
-            </Box>
             </FadeInView>
           ))}
         </Box>
