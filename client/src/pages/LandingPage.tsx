@@ -5,6 +5,7 @@ import { Hero } from "../components/landingPage/Hero";
 import { WhyIMU } from "../components/landingPage/WhyIMU";
 import { WhatIsIMU } from "../components/landingPage/WhatIsIMU";
 import { IMUInPratice } from "../components/landingPage/IMUInPratice";
+import { IMUJourney } from "../components/landingPage/IMUJourney";
 
 type LandingLocationState = {
   scrollTo?: string;
@@ -42,6 +43,9 @@ export function LandingPage() {
       </Box>
       <Box id="concept" sx={{ scrollMarginTop: "80px" }}>
         <WhatIsIMU />
+      </Box>
+      <Box id="journey" sx={{ scrollMarginTop: "80px" }}>
+        <IMUJourney />
       </Box>
       <Box id="service-delivery" sx={{ scrollMarginTop: "80px" }}>
         <IMUInPratice />
