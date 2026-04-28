@@ -68,6 +68,7 @@ export function HappyI() {
                 color: "#1E2330",
                 lineHeight: 1,
                 mb: 0.5,
+                mt: { xs: 0, md: 6 },
               }}
             >
               Happy I
@@ -198,6 +199,7 @@ export function HappyI() {
                   filter: "blur(40px)",
                   pointerEvents: "none",
                   zIndex: 0,
+                  // mt: { xs: 0, md: -17 },
                 }}
               />
 
@@ -210,6 +212,7 @@ export function HappyI() {
                   fontSize: { xs: "18px", md: "22px" },
                   lineHeight: 1.5,
                   color: "#2B2B2B",
+                  // mt: 0,
                 }}
               >
                 To be unhappy, we always find a reason.

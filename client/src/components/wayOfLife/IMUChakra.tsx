@@ -1,17 +1,55 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import { FadeInView } from "../ui/FadeInView";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  type MotionValue,
+} from "framer-motion";
+import { useRef } from "react";
 
 type ChakraCard = {
   title: string;
   description: string;
 };
 
-const chakraSections: Array<{
+type ChakraSection = {
   title: string;
   tone: string;
   cards: ChakraCard[];
-}> = [
+};
+
+type ChakraOrbitPoint = {
+  finalAngle: number;
+  middleAngle: number;
+  startAngle: number;
+  stemHeight: string;
+};
+
+const toRadians = (angle: number) => (angle * Math.PI) / 180;
+
+const chakraOrbitPoints: ChakraOrbitPoint[] = [
+  {
+    startAngle: 2,
+    middleAngle: 82,
+    finalAngle: 132,
+    stemHeight: "200px",
+  },
+  {
+    startAngle: 6,
+    middleAngle: 48,
+    finalAngle: 90,
+    stemHeight: "200px",
+  },
+  {
+    startAngle: 10,
+    middleAngle: 18,
+    finalAngle: 48,
+    stemHeight: "200px",
+  },
+];
+
+const chakraSections: ChakraSection[] = [
   {
     title: "Install",
     tone: "#EAEEFA",
@@ -162,57 +200,217 @@ function ChakraColumn({ tone, cards }: { tone: string; cards: ChakraCard[] }) {
   );
 }
 
-export function IMUChakra() {
+function ChakraOrbitChip({
+  section,
+  index,
+  scrollYProgress,
+  chipOpacity,
+  chipScale,
+  stemOpacity,
+  stemScale,
+}: {
+  section: ChakraSection;
+  index: number;
+  scrollYProgress: MotionValue<number>;
+  chipOpacity: MotionValue<number>;
+  chipScale: MotionValue<number>;
+  stemOpacity: MotionValue<number>;
+  stemScale: MotionValue<number>;
+}) {
+  const orbitPoint = chakraOrbitPoints[index];
+  const angle = useTransform(
+    scrollYProgress,
+    [0.02, 0.22, 0.42],
+    [orbitPoint.startAngle, orbitPoint.middleAngle, orbitPoint.finalAngle],
+  );
+  const left = useTransform(angle, (currentAngle) => {
+    const radius = 500;
+    return `calc(50% + ${(Math.cos(toRadians(currentAngle)) * radius).toFixed(
+      3,
+    )}px)`;
+  });
+  const top = useTransform(angle, (currentAngle) => {
+    const radius = 500;
+    return `calc(var(--chakra-circle-center-y) + ${(
+      Math.sin(toRadians(currentAngle)) * radius
+    ).toFixed(3)}px)`;
+  });
+
   return (
-    <Box
-      component="section"
-      id="imu-chakra"
-      sx={{
-        position: "relative",
-        overflow: "hidden",
-        backgroundColor: "#ffffff",
-        pt: { xs: 7, md: 10 },
-        pb: { xs: 8, md: 12 },
+    <motion.div
+      style={{
+        position: "absolute",
+        left,
+        top,
+        width: 0,
+        height: 0,
+        zIndex: 2,
       }}
     >
-      <Box
-        aria-hidden
-        sx={{
+      <motion.div
+        style={{
+          opacity: chipOpacity,
+          scale: chipScale,
           position: "absolute",
           left: 0,
-          right: 0,
           top: 0,
-          height: { xs: "430px", md: "500px" },
-          overflow: "hidden",
-          pointerEvents: "none",
         }}
       >
         <Box
           sx={{
-            position: "absolute",
-            left: "50%",
-            top: { xs: "-180px", md: "-205px" },
-            transform: "translateX(-50%)",
-            width: { xs: "980px", md: "982px" },
-            height: { xs: "980px", md: "984px" },
-            marginTop: { xs: "-490px", md: "-300px" },
-            borderRadius: "50%",
-            border: "3px dashed #648F6C",
-            pointerEvents: "none",
+            display: "inline-flex",
+            alignItems: "center",
+            height: "58px",
+            justifyContent: "center",
+            px: 2,
+            py: 0.75,
+            borderRadius: "10px",
+            border: "1px solid rgba(30,35,48,0.08)",
+            backgroundColor: section.tone,
+            color: "#1E2330",
+            fontFamily: (theme) => theme.imu.typography.fontFamilies.primary,
+            fontSize: { xs: "20px", md: "32px" },
+            lineHeight: 1,
+            minWidth: { xs: "auto", md: "120px" },
+            whiteSpace: "nowrap",
+            transform: "translate(-50%, -50%)",
           }}
-        />
-      </Box>
+        >
+          {section.title}
+        </Box>
+      </motion.div>
 
-      <Box
+      {/* <Box
         sx={{
-          width: "min(94%, 1240px)",
-          mx: "auto",
-          position: "relative",
-          zIndex: 1,
+          position: "absolute",
+          left: 0,
+          top: "29px",
+          transform: "translateX(-50%)",
+        }}
+      > */}
+      <motion.div
+        style={{
+          opacity: stemOpacity,
+          scaleY: stemScale,
+          transformOrigin: "top center",
+          position: "absolute",
+          left: 0,
+          top: "29px",
+          transform: "translateX(-50%)",
         }}
       >
-        <FadeInView direction="up">
-          <Box sx={{ textAlign: "center", mt: { xs: -8, md: 10 } }}>
+        <Box
+          sx={{
+            width: "2px",
+            height: orbitPoint.stemHeight,
+            backgroundColor: "rgba(30,35,48,0.18)",
+          }}
+        />
+      </motion.div>
+      {/* </Box> */}
+    </motion.div>
+  );
+}
+
+export function IMUChakra() {
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end end"],
+  });
+
+  const chipOpacity = useTransform(scrollYProgress, [0.01, 0.06], [0, 1]);
+  const chipScale = useTransform(scrollYProgress, [0.01, 0.42], [0.86, 1]);
+  const stemOpacity = useTransform(scrollYProgress, [0.28, 0.32], [0, 1]);
+  const stemScale = useTransform(scrollYProgress, [0.28, 0.36], [0, 1]);
+  const cardOpacity = useTransform(scrollYProgress, [0.2, 0.32], [0, 1]);
+  const cardY = useTransform(scrollYProgress, [0.3, 0.44], [14, 0]);
+
+  return (
+    <Box
+      ref={sectionRef}
+      component="section"
+      id="imu-chakra"
+      sx={{
+        position: "relative",
+        overflow: "visible",
+        backgroundColor: "#ffffff",
+        minHeight: { xs: "calc(180vh + 200px)", md: "calc(170vh + 200px)" },
+      }}
+    >
+      <Box
+        sx={{
+          position: "sticky",
+          top: 0,
+          height: "calc(100vh + 300px)",
+          boxSizing: "border-box",
+          overflow: "hidden",
+          pt: { xs: 5, md: 4 },
+          pb: { xs: 3, md: 3 },
+          display: "flex",
+          alignItems: "flex-start",
+        }}
+      >
+        <Box
+          aria-hidden
+          sx={{
+            position: "absolute",
+            left: 0,
+            right: 0,
+            top: 0,
+            height: { xs: "430px", md: "500px" },
+            overflow: "hidden",
+            pointerEvents: "none",
+          }}
+        >
+          <Box
+            sx={{
+              position: "absolute",
+              left: "50%",
+              top: { xs: "-180px", md: "-205px" },
+              transform: "translateX(-50%)",
+              width: { xs: "980px", md: "982px" },
+              height: { xs: "980px", md: "984px" },
+              marginTop: { xs: "-490px", md: "-300px" },
+              borderRadius: "50%",
+              border: "3px dashed #648F6C",
+              pointerEvents: "none",
+            }}
+          />
+        </Box>
+
+        <Box
+          sx={{
+            position: "absolute",
+            inset: 0,
+            zIndex: 2,
+            pointerEvents: "none",
+            "--chakra-circle-center-y": { xs: "-180px", md: "-13px" },
+          }}
+        >
+          {chakraSections.map((section, index) => (
+            <ChakraOrbitChip
+              key={section.title}
+              section={section}
+              index={index}
+              scrollYProgress={scrollYProgress}
+              chipOpacity={chipOpacity}
+              chipScale={chipScale}
+              stemOpacity={stemOpacity}
+              stemScale={stemScale}
+            />
+          ))}
+        </Box>
+
+        <Box
+          sx={{
+            width: "min(94%, 1240px)",
+            mx: "auto",
+            position: "relative",
+            zIndex: 3,
+          }}
+        >
+          <Box sx={{ textAlign: "center", mt: { xs: 1, md: 10 }, mb: -20 }}>
             <Typography
               sx={{
                 fontFamily: (theme) =>
@@ -221,125 +419,57 @@ export function IMUChakra() {
                 lineHeight: 1,
                 fontWeight: 700,
                 color: "#1E2330",
-                
               }}
             >
               The IMU Chakra
             </Typography>
             <WavyUnderline width="260px" color="#BD5201" />
           </Box>
-        </FadeInView>
 
-        <Box
-          sx={{
-            position: "relative",
-            height: { xs: "250px", md: "275px" },
-            mb: { xs: 2, md: 3 },
-          }}
-        >
-          {chakraSections.map((section, index) => {
-            const chipStyles =
-              index === 1
-                ? {
-                    left: "50%",
-                    top: { xs: "136px", md: "238px" },
-                    transform: "translateX(-50%)",
-                  }
-                : index === 0
-                  ? {
-                      left: { xs: "13%", md: "20%" },
-                      top: { xs: "70px", md: "62px" },
-                      transform: "translateX(-50%)",
-                    }
-                  : {
-                      left: { xs: "87%", md: "80%" },
-                      top: { xs: "70px", md: "62px" },
-                      transform: "translateX(-50%)",
-                    };
+          <Box
+            sx={{
+              position: "relative",
+              height: { xs: "245px", md: "365px" },
+              mb: { xs: 0, md: 0 },
+            }}
+          />
 
-            const stemStyles =
-              index === 1
-                ? {
-                    left: "50%",
-                    top: { xs: "168px", md: "272px" },
-                    height: { xs: "24px", md: "122px" },
-                    transform: "translateX(-50%)",
-                  }
-                : {
-                    left:
-                      index === 0
-                        ? { xs: "13%", md: "20%" }
-                        : { xs: "87%", md: "80%" },
-                    top: { xs: "102px", md: "94px" },
-                    height: { xs: "112px", md: "245px" },
-                    transform: "translateX(-50%)",
-                  };
-
-            return (
-              <Box key={section.title}>
-                <Box
-                  sx={{
-                    position: "absolute",
-                    display: "inline-flex",
-                    alignItems: "center",
-                    height: "58px",
-                    justifyContent: "center",
-                    px: 2,
-                    py: 0.75,
-                    borderRadius: "10px",
-                    border: "1px solid rgba(30,35,48,0.08)",
-                    backgroundColor: section.tone,
-                    color: "#1E2330",
-                    fontFamily: (theme) =>
-                      theme.imu.typography.fontFamilies.primary,
-                    fontSize: { xs: "20px", md: "32px" },
-                    lineHeight: 1,
-                    minWidth: { xs: "auto", md: "120px" },
-                    zIndex: 2,
-                    ...chipStyles,
-                  }}
-                >
-                  {section.title}
-                </Box>
-
-                <Box
-                  sx={{
-                    position: "absolute",
-                    width: "2px",
-                    backgroundColor: "rgba(30,35,48,0.18)",
-                    zIndex: 1,
-                    ...stemStyles,
-                  }}
-                />
+          <Box
+            component={motion.div}
+            style={{ opacity: cardOpacity, y: cardY }}
+            sx={{
+              display: "grid",
+              gridTemplateColumns: {
+                xs: "1fr",
+                md: "repeat(3, minmax(0, 1fr))",
+              },
+              rowGap: { xs: 4, md: 2 },
+              columnGap: { xs: 3, md: 1 },
+              alignItems: "start",
+              justifyItems: "center",
+              width: { xs: "100%", md: "min(86%, 1080px)" },
+              mx: "auto",
+              mt: { xs: -1, md: 15 },
+              pb: { xs: 8, md: 20 },
+              position: "relative",
+              zIndex: 4,
+            }}
+          >
+            {chakraSections.map((section, index) => (
+              <Box
+                key={section.title}
+                sx={{
+                  position: "relative",
+                  zIndex: 1,
+                  backgroundColor: "#ffffff",
+                  pt: { xs: 3, md: 0 },
+                  mt: index === 1 ? { xs: "32px", md: "84px" } : "0px",
+                }}
+              >
+                <ChakraColumn tone={section.tone} cards={section.cards} />
               </Box>
-            );
-          })}
-        </Box>
-
-        <Box
-          sx={{
-            display: "grid",
-            gridTemplateColumns: { xs: "1fr", md: "repeat(3, minmax(0, 1fr))" },
-            rowGap: { xs: 4, md: 2 },
-            columnGap: { xs: 3, md: 0.5 },
-            alignItems: "start",
-            justifyItems: "center",
-            width: { xs: "100%", md: "min(86%, 1080px)" },
-            mx: "auto",
-            mt: { xs: -1, md: 8 },
-            // mt:{index === 1 ? -1 : -2, md: 8}, // Adjust top margin for middle column
-          }}
-        >
-          {chakraSections.map((section, index) => (
-            <FadeInView
-              key={section.title}
-              direction="up"
-              delay={0.08 + index * 0.06}
-              style={{ marginTop: index === 1 ? "56px" : "0px" }}
-            >
-              <ChakraColumn tone={section.tone} cards={section.cards} />
-            </FadeInView>
-          ))}
+            ))}
+          </Box>
         </Box>
       </Box>
     </Box>
