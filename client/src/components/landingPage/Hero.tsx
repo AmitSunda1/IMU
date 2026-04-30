@@ -3,10 +3,11 @@ import Typography from "@mui/material/Typography";
 import { useEffect, useMemo, useState } from "react";
 import heroImg from "../../assets/images/heroImg.png";
 import { IMUButton } from "../ui/IMUButton";
-import helloImg from "../../assets/images/Emoji.png";
+import helloImg from "../../assets/images/hi.webp";
 import { FadeInView } from "../ui/FadeInView";
+import LogoImg from "../../assets/logo/IMU-Logo.webp"
 
-const words = ["MITRA.", "BEDU.", "DOST."] as const;
+const words = ["MITRA", "BEDU", "DOST", "BUDDY", "YAARA"] as const;
 
 const transitionDurationMs = 560;
 const transitionStepMs = 2200;
@@ -120,7 +121,7 @@ export function Hero() {
                   width: { xs: "52px", sm: "62px", md: "72px" },
                   height: { xs: "52px", sm: "62px", md: "72px" },
                   objectFit: "contain",
-                  ml:"20px"
+                  ml: "20px"
                 }}
               />
             </Box>
@@ -164,8 +165,8 @@ export function Hero() {
                       height: "86px",
                       px: "32px",
                       borderRadius: "999px",
-                      border: "2px solid #FFFFFF",
-                      background: "#FFF7F1",
+                      // border: "2px solid #FFFFFF",
+                      // background: "#FFF7F1",
                       opacity: isCenterStyle ? 1 : 0.5,
                       backdropFilter: isCenterStyle ? "none" : "blur(1px)",
                       WebkitBackdropFilter: isCenterStyle
@@ -181,6 +182,9 @@ export function Hero() {
                       lineHeight: "100%",
                       letterSpacing: "0%",
                       whiteSpace: "nowrap",
+                      textDecoration: isCenterStyle ? "underline" : "none",
+                      textDecorationThickness: "4px",
+                      textUnderlineOffset: "10px",
                       transition: isAnimating
                         ? `opacity ${transitionDurationMs}ms cubic-bezier(0.25, 0.8, 0.25, 1), color ${transitionDurationMs}ms cubic-bezier(0.25, 0.8, 0.25, 1), backdrop-filter ${transitionDurationMs}ms cubic-bezier(0.25, 0.8, 0.25, 1), -webkit-backdrop-filter ${transitionDurationMs}ms cubic-bezier(0.25, 0.8, 0.25, 1)`
                         : "none",
@@ -205,21 +209,35 @@ export function Hero() {
             px: { xs: 3, sm: 6, lg: 5 },
             pb: { xs: 5, lg: 0 },
             gap: 2,
-            mt: { xs: 3, md: 5, lg: 12},
+            mt: { xs: 3, md: 5, lg: 12 },
           }}
         >
-          <Typography
-            sx={{
-              color: "text.primary",
-              fontFamily: (theme) => theme.imu.typography.fontFamilies.primary,
-              fontSize: "40px",
-              lineHeight: "100%",
-              fontWeight: 400,
-              letterSpacing: "0%",
-            }}
-          >
-            Welcome to IMU Way
-          </Typography>
+          <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "flex-start", alignItems: "center", gap: 1 , }}>
+
+            <Typography
+              sx={{
+                color: "text.primary",
+                fontFamily: (theme) => theme.imu.typography.fontFamilies.primary,
+                fontSize: "72px",
+                lineHeight: "100%",
+                fontWeight: 400,
+                letterSpacing: "0%",
+              }}
+            >
+              Welcome to
+            </Typography>
+            <Box
+              component="img"
+              src={LogoImg}
+              alt="IMU Logo"
+              sx={{
+                width: { xs: "52px", sm: "62px", md: "78px" },
+                height: { xs: "52px", sm: "62px", md: "78px" },
+                objectFit: "contain",
+                ml: "10px"
+              }}
+            />
+          </Box>
 
           <Typography
             sx={{
@@ -241,8 +259,8 @@ export function Hero() {
             sx={{
               mt: 1,
               minWidth: { xs: "220px", sm: "250px", md: "240px" },
-              height:"40px",
-              fontSize:"16px"
+              height: "40px",
+              fontSize: "16px"
             }}
           />
         </Box>

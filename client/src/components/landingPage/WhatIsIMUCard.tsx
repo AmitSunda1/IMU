@@ -26,7 +26,7 @@ export function WhatIsIMUCard({ id, onVisible, children, isActive, toneColor, is
       {
         root: null,
         // Triggers when the item is within the middle 40% of the screen
-        rootMargin: "-40% 0px -40% 0px", 
+        rootMargin: "-40% 0px -40% 0px",
         threshold: 0,
       }
     );
@@ -47,7 +47,7 @@ export function WhatIsIMUCard({ id, onVisible, children, isActive, toneColor, is
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        width:"720px",
+        width: "720px",
         pointerEvents: isTransparentSpacer ? "none" : "auto",
       }}
     >
