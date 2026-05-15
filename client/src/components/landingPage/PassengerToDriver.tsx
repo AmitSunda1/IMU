@@ -1,7 +1,60 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { FadeInView } from "../ui/FadeInView";
-import BottomBorder from "../../assets/images/PassengerBorder.png"
+// import BottomBorder from "../../assets/images/PassengerBorder.png"
+import RoadImg from "../../assets/images/Road.png";
+
+const CardConnector = () => (
+  <Box
+    sx={{
+      position: "absolute",
+      bottom: "-165px", // Adjusting height to reach the road
+      left: "50%",
+      transform: "translateX(-50%)",
+      display: { xs: "none", lg: "flex" }, // Show only on desktop to match road alignment
+      flexDirection: "column",
+      alignItems: "center",
+      zIndex: 1,
+    }}
+  >
+    {/* Blue Circle with White X */}
+    <Box
+      sx={{
+        width: 34,
+        height: 34,
+        borderRadius: "50%",
+        backgroundColor: "#395589",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        // border: "2px solid #ffffff",
+        boxShadow: "0px 4px 12px rgba(35, 64, 131, 0.15)",
+        zIndex: 2,
+        mb: "-2px", // Slight overlap with line
+      }}
+    >
+      <Typography
+        sx={{
+          color: "#ffffff",
+          fontSize: "22px",
+          fontWeight: 600,
+          lineHeight: 1,
+          mt: "-3px",
+        }}
+      >
+        ×
+      </Typography>
+    </Box>
+    {/* Vertical Blue Line */}
+    <Box
+      sx={{
+        width: "8px",
+        height: "150px",
+        backgroundColor: "#395589",
+      }}
+    />
+  </Box>
+);
 
 export function PassengerToDriver() {
   return (
@@ -30,16 +83,18 @@ export function PassengerToDriver() {
           sx={{
             order: { xs: 2, lg: 1 },
             width: { xs: "100%", sm: "400px", lg: "360px" },
-            minHeight: { xs: "320px", md: "360px" },
-            backgroundColor: "#EBF2FF",
-            borderRadius: "180px 180px 88px 88px",
+            minHeight: { xs: "208px", md: "237px" },
+            backgroundColor: "#C2D6FF7D",
+            borderRadius: "24px",
             px: { xs: 4, md: 5 },
-            py: { xs: 6, md: 7 },
+            py: { xs: 2, md: 4 },
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
             textAlign: "center",
+            mt: { xs: 0, md: -25 },
+            position: "relative",
             // boxShadow: "0px 10px 30px rgba(35, 64, 131, 0.03)",
           }}
         >
@@ -61,6 +116,7 @@ export function PassengerToDriver() {
               doubt.
             </Typography>
           </FadeInView>
+          <CardConnector />
         </Box>
 
         {/* ── Center Heading & Badge ───────────────────────────────────── */}
@@ -171,7 +227,7 @@ export function PassengerToDriver() {
                   pt: 2.5,
                   pb: 2,
                   mt: -.5,
-                //   display: "flex",
+                  //   display: "flex",
                   justifyContent: "center",
                   alignItems: "top",
                   position: "relative",
@@ -189,7 +245,7 @@ export function PassengerToDriver() {
                     lineHeight: 1,
                     whiteSpace: "nowrap",
                     mt: -4,
-                    pb:2
+                    pb: 2
                   }}
                 >
                   “I AM YOU”
@@ -204,16 +260,18 @@ export function PassengerToDriver() {
           sx={{
             order: { xs: 3, lg: 3 },
             width: { xs: "100%", sm: "400px", lg: "360px" },
-            minHeight: { xs: "320px", md: "360px" },
-            backgroundColor: "#EBF2FF",
-            borderRadius: "180px 180px 88px 88px",
+            minHeight: { xs: "208px", md: "208px" },
+            backgroundColor: "#C2D6FF7D",
+            borderRadius: "24px",
             px: { xs: 4, md: 5 },
-            py: { xs: 6, md: 7 },
+            py: { xs: 2, md: 4 },
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
             textAlign: "center",
+            mt: { xs: 0, md: -25 },
+            position: "relative",
             // boxShadow: "0px 10px 30px rgba(35, 64, 131, 0.03)",
           }}
         >
@@ -245,11 +303,12 @@ export function PassengerToDriver() {
               The way you live.
             </Typography>
           </FadeInView>
+          <CardConnector />
         </Box>
       </Box>
 
       <Box>
-        <img style={{height:"20px", marginBottom:"-220px"}} src={BottomBorder} alt="" />
+        <img style={{ height: "100%", width:"100%", marginBottom: "-170px" }} src={RoadImg} alt="" />
       </Box>
     </Box>
   );

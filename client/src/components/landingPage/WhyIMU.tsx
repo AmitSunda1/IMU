@@ -128,8 +128,8 @@ export function WhyIMU() {
                 gap: 2,
               }}
             >
-              {/* Happy I — always visible */}
-              <Box sx={{ width: "100%" }}>
+              {/* Happy I — always visible and on top */}
+              <Box sx={{ width: "100%", zIndex: 3, position: "relative" }}>
                 <Box
                   component="img"
                   src={HappyIImg}
@@ -160,65 +160,74 @@ export function WhyIMU() {
                 </Typography>
               </Box>
 
-              {/* Arrow — fade in step 1 */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: showArrow ? 1 : 0 }}
-                transition={fadeIn}
-              >
-                <svg width="16" height="32" viewBox="0 0 16 32" fill="none">
-                  <path
-                    d="M8 0V30M8 30L2 24M8 30L14 24"
-                    stroke="#234083"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </motion.div>
+              {/* Arrow — slides out from behind Happy I */}
+              <Box sx={{ width: "100%", zIndex: 2, position: "relative", overflow: "hidden", py: 0.5 }}>
+                <motion.div
+                  initial={{ y: -40, opacity: 0 }}
+                  animate={{ 
+                    y: showArrow ? 0 : -40, 
+                    opacity: showArrow ? 1 : 0 
+                  }}
+                  transition={fadeIn}
+                >
+                  <svg width="16" height="32" viewBox="0 0 16 32" fill="none" style={{ display: 'block', margin: '0 auto' }}>
+                    <path
+                      d="M8 0V30M8 30L2 24M8 30L14 24"
+                      stroke="#234083"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </motion.div>
+              </Box>
 
-              {/* Happy U — fade in step 2 */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: showHappyU ? 1 : 0 }}
-                transition={fadeIn}
-                style={{ width: "100%" }}
-              >
-                <Box sx={{ width: "100%" }}>
-                  <Box
-                    component="img"
-                    src={HappyUImg}
-                    alt="Happy U"
-                    sx={{
-                      width: { xs: "140px", md: "160px" },
-                      height: "auto",
-                      objectFit: "contain",
-                      mb: 1.5,
-                      display: "block",
-                      mx: "auto",
-                    }}
-                  />
-                  <Typography
-                    sx={{
-                      fontFamily: (t) =>
-                        t.imu.typography.fontFamilies.secondary,
-                      fontSize: "16px",
-                      color: "#757575",
-                      lineHeight: 1.5,
-                    }}
-                  >
-                    Once I am Happy then only
-                    <br />
-                    I can share with others &ndash;{" "}
+              {/* Happy U — slides out from behind the arrow */}
+              <Box sx={{ width: "100%", zIndex: 1, position: "relative", overflow: "hidden" }}>
+                <motion.div
+                  initial={{ y: -100, opacity: 0 }}
+                  animate={{ 
+                    y: showHappyU ? 0 : -100, 
+                    opacity: showHappyU ? 1 : 0 
+                  }}
+                  transition={fadeIn}
+                >
+                  <Box sx={{ width: "100%" }}>
                     <Box
-                      component="span"
-                      sx={{ fontWeight: 700, color: "#434343" }}
+                      component="img"
+                      src={HappyUImg}
+                      alt="Happy U"
+                      sx={{
+                        width: { xs: "140px", md: "160px" },
+                        height: "auto",
+                        objectFit: "contain",
+                        mb: 1.5,
+                        display: "block",
+                        mx: "auto",
+                      }}
+                    />
+                    <Typography
+                      sx={{
+                        fontFamily: (t) =>
+                          t.imu.typography.fontFamilies.secondary,
+                        fontSize: "16px",
+                        color: "#757575",
+                        lineHeight: 1.5,
+                      }}
                     >
-                      Happy U
-                    </Box>
-                  </Typography>
-                </Box>
-              </motion.div>
+                      Once I am Happy then only
+                      <br />
+                      I can share with others &ndash;{" "}
+                      <Box
+                        component="span"
+                        sx={{ fontWeight: 700, color: "#434343" }}
+                      >
+                        Happy U
+                      </Box>
+                    </Typography>
+                  </Box>
+                </motion.div>
+              </Box>
 
               {/* CTA Button — fade in step 3 */}
               <motion.div
@@ -230,6 +239,8 @@ export function WhyIMU() {
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
+                  zIndex: 0,
+                  position: "relative"
                 }}
               >
                 <Box sx={{ width: "100%", maxWidth: "390px", mt: 1 }}>

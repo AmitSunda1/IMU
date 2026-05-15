@@ -171,12 +171,71 @@ function MassesPathLeftCard({ item }: { item: MassesPathLeftItem }) {
   );
 }
 
+/**
+ * RoadConnector — large D-ring road arc matching the reference design.
+ *
+ * Geometry  : outer R = 70px, inner R = 52px (18px thick ring), total arc = 140 × 70px
+ * Position  : centered on the gap midpoint; overlaps ~46px into each adjacent card
+ * Opacity   : 0.56
+ * Dashes    : 3px solid #FDFDFF along center arc (R = 61)
+ *
+ * ViewBox "0 0 70 140"
+ *   Left arc  center (70, 70): outer pts (70,0)&(70,140); inner pts (70,18)&(70,122)
+ *   Right arc center (0,  70): outer pts (0, 0)&(0, 140); inner pts (0, 18)&(0, 122)
+ */
+function RoadConnector({ side }: { side: "left" | "right" }) {
+  const isLeft = side === "left";
+
+  const leftPath = "M 70 0  A 70 70 0 0 0 70 140 L 70 122 A 52 52 0 0 1 70 18 L 70 0  Z";
+  const rightPath = "M 0  0  A 70 70 0 0 1 0  140 L 0  122 A 52 52 0 0 0 0  18 L 0  0  Z";
+
+  // Dashes along center arc R=61
+  const leftDash = "M 70 9  A 61 61 0 0 0 70 131";
+  const rightDash = "M 0  9  A 61 61 0 0 1 0  131";
+
+  return (
+    <Box
+      sx={{
+        position: "absolute",
+        // Position so arc center lands in the gap midpoint (gap ≈ 48px at md).
+        // top = 100% - (70 - 24) = calc(100% - 46px) puts center at 100% + 24px = gap/2
+        top: "calc(100% - 46px)",
+        height: "140px",
+        width: "70px",
+        zIndex: 10,
+        pointerEvents: "none",
+        display: { xs: "none", md: "block" },
+        ...(isLeft ? { left: "-57px" } : { right: "-70px" }),
+      }}
+    >
+      <svg
+        viewBox="0 0 50 50"
+        width="40"
+        height="80"
+        style={{ overflow: "visible", opacity: 0.56, display: "block" }}
+      >
+        {/* Road band */}
+        <path d={isLeft ? leftPath : rightPath} fill="#C8E8C4" />
+        {/* Road markings — 3px solid #FDFDFF */}
+        <path
+          d={isLeft ? leftDash : rightDash}
+          fill="none"
+          stroke="#FDFDFF"
+          strokeWidth="3"
+          strokeDasharray="10 10"
+          strokeLinecap="round"
+        />
+      </svg>
+    </Box>
+  );
+}
+
 function MassesPathRightCard({ item }: { item: MassesPathRightItem }) {
   return (
     <Box
       sx={{
         position: "relative",
-        backgroundColor: "#C2D6FF",
+        background: "radial-gradient(11.93% 79.74% at 95.16% 81.03%, #AAE19D 0%, #F1FDEE 100%)",
         borderRadius: "24px",
         p: { xs: 3.5, md: 4 },
         minHeight: { xs: "auto", md: item.minHeight },
@@ -186,7 +245,7 @@ function MassesPathRightCard({ item }: { item: MassesPathRightItem }) {
         flexDirection: "column",
         justifyContent: "center",
         overflow: "visible",
-        border: "1.5px solid #C2D6FF",
+        border: "1.5px solid #C8E8C4",
       }}
     >
       {/* Step Circle */}
@@ -200,14 +259,14 @@ function MassesPathRightCard({ item }: { item: MassesPathRightItem }) {
           height: "32px",
           borderRadius: "50%",
           backgroundColor: "#ffffff",
-          color: "#234083",
+          color: "#3A7D44",
           fontWeight: 700,
           fontSize: "14px",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          borderTop: "2px solid #C2D6FF",
-          boxShadow: "0px 3px 8px rgba(30, 35, 48, 0.15)",
+          borderTop: "2px solid #C8E8C4",
+          boxShadow: "0px 3px 8px rgba(56, 140, 68, 0.18)",
           zIndex: 2,
           fontFamily: (theme) => theme.imu.typography.fontFamilies.secondary,
         }}
@@ -215,111 +274,9 @@ function MassesPathRightCard({ item }: { item: MassesPathRightItem }) {
         {item.stepNumber}
       </Box>
 
-      {/* ── Custom SVG Sweeping Curves per Step ─────────────────────────── */}
+      {/* Road Connector Arc */}
       {item.hasNextLine && (
-        <>
-          {/* Step 1 -> Step 2 Curve: sweeps from right side down to left-center */}
-          {item.stepNumber === 1 && (
-            <Box
-              sx={{
-                position: "absolute",
-                bottom: { xs: "-32px", md: "-48px" },
-                right: "12%",
-                left: "50%",
-                height: { xs: "64px", md: "80px" },
-                pointerEvents: "none",
-                zIndex: 1,
-                display: { xs: "none", md: "block" },
-                overflow: "visible",
-              }}
-            >
-              <svg
-                viewBox="0 0 100 100"
-                width="100%"
-                height="100%"
-                preserveAspectRatio="none"
-                style={{ overflow: "visible" }}
-              >
-                <path
-                  d="M 80 0 C 60 40, 30 70, 0 100"
-                  stroke="#C9DAFF"
-                  strokeWidth="5"
-                  strokeDasharray="12 12"
-                  strokeLinecap="round"
-                  fill="none"
-                />
-              </svg>
-            </Box>
-          )}
-
-          {/* Step 2 -> Step 3 Curve: sweeps horizontally from left, then curves down-right */}
-          {item.stepNumber === 2 && (
-            <Box
-              sx={{
-                position: "absolute",
-                bottom: { xs: "-32px", md: "-48px" },
-                left: "20%",
-                right: "50%",
-                height: { xs: "64px", md: "80px" },
-                pointerEvents: "none",
-                zIndex: 1,
-                display: { xs: "none", md: "block" },
-                overflow: "visible",
-              }}
-            >
-              <svg
-                viewBox="0 0 100 100"
-                width="100%"
-                height="100%"
-                preserveAspectRatio="none"
-                style={{ overflow: "visible" }}
-              >
-                <path
-                  d="M 0 10 C 40 10, 70 30, 100 100"
-                  stroke="#C9DAFF"
-                  strokeWidth="5"
-                  strokeDasharray="12 12"
-                  strokeLinecap="round"
-                  fill="none"
-                />
-              </svg>
-            </Box>
-          )}
-
-          {/* Step 3 -> Step 4 Curve: starts below green button on left, swoops down-right */}
-          {item.stepNumber === 3 && (
-            <Box
-              sx={{
-                position: "absolute",
-                bottom: { xs: "-32px", md: "-48px" },
-                left: "24%",
-                right: "50%",
-                height: { xs: "64px", md: "80px" },
-                pointerEvents: "none",
-                zIndex: 1,
-                display: { xs: "none", md: "block" },
-                overflow: "visible",
-              }}
-            >
-              <svg
-                viewBox="0 0 100 100"
-                width="100%"
-                height="100%"
-                preserveAspectRatio="none"
-                style={{ overflow: "visible" }}
-              >
-                <path
-                  d="M 10 0 C 10 40, 40 70, 100 100"
-                  stroke="#C9DAFF"
-                  strokeWidth="5"
-                  strokeDasharray="12 12"
-                  strokeLinecap="round"
-                  fill="none"
-                />
-              </svg>
-            </Box>
-          )}
-        </>
+        <RoadConnector side={item.stepNumber % 2 !== 0 ? "left" : "right"} />
       )}
 
       {item.isRealization && (
@@ -359,7 +316,7 @@ function MassesPathRightCard({ item }: { item: MassesPathRightItem }) {
         {item.description}
       </Typography>
 
-      {/* Green Badge Button & Premium Avatar */}
+      {/* Green Badge Button */}
       {item.hasGreenBadge && (
         <Box
           sx={{
@@ -398,7 +355,7 @@ function MassesPathRightCard({ item }: { item: MassesPathRightItem }) {
             >
               GIVING
             </Box>{" "}
-            - &ldquo;SERVICE&rdquo;
+            - &ldquo;SERVICE&rdquo; &rsaquo;
           </Box>
         </Box>
       )}
@@ -453,7 +410,7 @@ export function MassesPath() {
           <Box
             sx={{
               display: "grid",
-              gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
+              gridTemplateColumns: { xs: "1fr", md: "40% 60%" },
               gap: { xs: 4, md: 6, lg: 8 },
               mb: { xs: 0, md: -2 },
             }}
@@ -525,7 +482,7 @@ export function MassesPath() {
                 key={`path-row-${index}`}
                 sx={{
                   display: "grid",
-                  gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
+                  gridTemplateColumns: { xs: "1fr", md: "40% 60%" },
                   gap: { xs: 4, md: 6, lg: 8 },
                   alignItems: "stretch",
                 }}

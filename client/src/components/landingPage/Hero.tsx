@@ -38,12 +38,12 @@ export function Hero() {
   }, [isAnimating]);
 
   const stackWords = useMemo(() => {
-    const top = words[(centerIndex - 1 + words.length) % words.length];
+    const prev = words[(centerIndex - 1 + words.length) % words.length];
     const center = words[centerIndex];
-    const bottom = words[(centerIndex + 1) % words.length];
+    const next = words[(centerIndex + 1) % words.length];
     const upcoming = words[(centerIndex + 2) % words.length];
 
-    return [top, center, bottom, upcoming];
+    return [prev, center, next, upcoming];
   }, [centerIndex]);
 
   return (
@@ -86,19 +86,18 @@ export function Hero() {
           width: "100%",
           display: "flex",
           alignItems: "center",
-          justifyContent: { xs: "center", lg: "flex-start" },
-          pl: { xs: 0, lg: 10 },
-          mt: { xs: 4, lg: -10 },
+          justifyContent: "center",
+          pl: { xs: 0, lg: 0 },
+          mt: { xs: 4, lg: -30 },
         }}
       >
         <Box
           sx={{
-            position: "relative",
-            zIndex: 1,
             display: "flex",
+            flexDirection: "column",
             alignItems: "center",
-            flexWrap: "nowrap",
-            gap: { xs: 1.5, md: 2.5 },
+            gap: { xs: 1.5, md: 2 },
+            width: "100%",
           }}
         >
           {/* "Hi" Text */}
@@ -106,13 +105,15 @@ export function Hero() {
             sx={{
               fontFamily: (theme) =>
                 theme.imu.typography.fontFamilies.secondary,
-              fontSize: { xs: "46px", sm: "58px", md: "72px" },
+              fontSize: { xs: "34px", sm: "44px", md: "54px" },
               fontWeight: 700,
               color: "#3B5998",
-              lineHeight: "100%",
+              lineHeight: "120%",
               whiteSpace: "nowrap",
-              display: "inline-flex",
+              display: "flex",
               alignItems: "center",
+              pl: 0,
+
             }}
           >
             Hi
@@ -121,27 +122,31 @@ export function Hero() {
           {/* Stacked Words Container */}
           <Box
             sx={{
-              height: { xs: "202px", sm: "250px", md: "292px" },
-              width: { xs: "250px", sm: "300px", md: "360px" },
+              height: { xs: "70px", sm: "85px", md: "100px" },
+              width: {
+                xs: "100%",
+                md: "calc(3 * 210px + 2 * 20px)",
+              },
               maxWidth: "100%",
               position: "relative",
               overflow: "hidden",
+              px: { xs: 2, lg: 0 },
             }}
           >
             <Box
               sx={{
-                width: "100%",
+                width: "max-content",
                 display: "flex",
-                flexDirection: "column",
-                alignItems: "flex-start",
-                gap: "17px",
+                flexDirection: "row",
+                alignItems: "center",
+                gap: "20px",
                 transform: isAnimating
                   ? {
-                      xs: "translateY(-73px)",
-                      sm: "translateY(-89px)",
-                      md: "translateY(-103px)",
+                      xs: "translateX(-160px)", // 140 + 20
+                      sm: "translateX(-190px)", // 170 + 20
+                      md: "translateX(-230px)", // 210 + 20
                     }
-                  : "translateY(0px)",
+                  : "translateX(0px)",
                 transition: isAnimating
                   ? `transform ${transitionDurationMs}ms cubic-bezier(0.25, 0.8, 0.25, 1)`
                   : "none",
@@ -158,20 +163,19 @@ export function Hero() {
                   <Box
                     key={`${word}-${idx}`}
                     sx={{
-                      width: "fit-content",
-                      height: { xs: "56px", sm: "72px", md: "86px" },
-                      px: { xs: "24px", sm: "28px", md: "32px" },
+                      width: { xs: "140px", sm: "170px", md: "210px" },
+                      height: { xs: "48px", sm: "60px", md: "72px" },
                       borderRadius: "999px",
                       background: isCenterStyle ? "#5074B6" : "#F4F7FF",
                       color: isCenterStyle ? "#ffffff" : "#C1C1C4",
-                      display: "inline-flex",
+                      display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
                       transform: isCenterStyle ? "scale(1)" : "scale(0.72)",
-                      transformOrigin: "left center",
+                      transformOrigin: "center center",
                       fontFamily: (theme) =>
                         theme.imu.typography.fontFamilies.secondary,
-                      fontSize: { xs: "46px", sm: "58px", md: "72px" },
+                      fontSize: { xs: "34px", sm: "44px", md: "54px" },
                       fontWeight: 700,
                       lineHeight: "100%",
                       whiteSpace: "nowrap",
